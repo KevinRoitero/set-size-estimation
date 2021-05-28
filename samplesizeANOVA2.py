@@ -1,25 +1,21 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 import numpy as np
 import scipy as sp
 from scipy import stats
 
-
-# In[3]:
-
-
-def ANOVA2(alpha = 0.05, beta = 0.2, minD = 0.05, sigma2 = 0.2, m = 2):
+def ANOVA2(alpha = 0.05, beta = 0.2, minD = 0.05, sigma2 = 0.2, m = 2, max_iter=1000):
     lambdaa = 4.86+3.584*np.sqrt(m-1)
     minDelta = (minD*minD)/(2*sigma2)
     n_approx = int(lambdaa / minDelta)
 
     large_enough = True
+    i = 0
     n = n_approx+100
-    while large_enough:
+    while large_enough and i<max_iter:
+        i+=1
         phiE = m*(n-1)
         phiA = m-1
         w = sp.stats.f.isf(alpha, phiA, phiE)
@@ -29,34 +25,16 @@ def ANOVA2(alpha = 0.05, beta = 0.2, minD = 0.05, sigma2 = 0.2, m = 2):
         one_minus_beta_approx = 1-sp.stats.norm(loc=0, scale=1).cdf(u_less_then)
 
         large_enough = (1-beta) < one_minus_beta_approx
-
-    #     print(f"n:{n}")
-    #     print(f"phiE:{phiE}")
-    #     print(f"w:{w}")
-    #     print(f"cA:{cA}")
-    #     print(f"phiA*:{phiA_star}")
-    #     print(f"u<=?*:{u_less_then}")
-    #     print(f"1=beta approx:{one_minus_beta_approx}")
-    #     print(f"minDelta:{minDelta}")
-    #     print(f"phiA:{phiA}")
-    #     print(f"alpha:{alpha}")
-    #     print(f"beta:{beta}")
-    #     print(f"--- large enough:{large_enough}")
-    #     print()
         n -= 1
     # add 
     n_recommended = n+2
+    if i == max_iter:
+        n_recommended = -1
     return (n_approx,n_recommended)
 #ANOVA2(m=10)
 
 
-# In[ ]:
 
-
-
-
-
-# In[ ]:
 
 
 
