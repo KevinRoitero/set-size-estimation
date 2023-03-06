@@ -1,4 +1,4 @@
-# topic-set-sizes-Sakai
+# Set Size Estimation
 python implementation of the tools from http://sakailab.com/download/
 
 Sheets Implemented:
